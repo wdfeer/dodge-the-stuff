@@ -1,18 +1,40 @@
+use std::fmt::Debug;
 use nannou::{App, Frame};
 use nannou::color::BLACK;
+use nannou::event::Update;
 use nannou::prelude::DARKGREEN;
 
 fn main() {
-    nannou::sketch(view).run();
+    nannou::app(model)
+        .update(update)
+        .simple_window(view)
+        .run();
 }
 
-fn view(app: &App, frame: Frame) {
+struct Model {
+    last_time: f32,
+    dead: bool,
+    enemies: [f32; 64]
+}
+
+fn model(_app: &App) -> Model {
+    Model {
+        last_time: 0f32,
+        dead: false,
+        enemies: [0.0; 64],
+    }
+}
+
+fn update(app: &App, model: &mut Model, update: Update) {
+
+}
+
+fn view(app: &App, model: &Model, frame: Frame) {
     frame.clear(BLACK);
 
     let draw = app.draw();
     let win = app.window_rect();
 
-    let t = app.time;
     draw.ellipse()
         .x_y(app.mouse.x, app.mouse.y)
         .radius(win.w() / 100f32)
