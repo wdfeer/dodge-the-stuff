@@ -14,29 +14,30 @@ fn main() {
         .run();
 }
 
+const MAX_ENEMIES: usize = 256;
 struct Model {
     dead: bool,
-    enemies: [(f32, f32); 64]
+    enemies: [(f32, f32); MAX_ENEMIES]
 }
 
 const EMPTY_ENEMY: (f32, f32) = (f32::MIN, f32::MIN);
 fn model(_app: &App) -> Model {
     Model {
         dead: false,
-        enemies: [EMPTY_ENEMY; 64],
+        enemies: [EMPTY_ENEMY; MAX_ENEMIES],
     }
 }
 
 fn update(app: &App, model: &mut Model, update: Update) {
     if app.keys.down.contains(&Space) && model.dead {
         model.dead = false;
-        model.enemies = [EMPTY_ENEMY; 64];
+        model.enemies = [EMPTY_ENEMY; MAX_ENEMIES];
     }
 
     if !model.dead  {
         let rect = app.window_rect();
         for e in model.enemies.iter_mut() {
-            if *e == EMPTY_ENEMY && random::<f32>() < update.since_last.as_secs_f32() / 3f32 {
+            if *e == EMPTY_ENEMY && random::<f32>() < update.since_last.as_secs_f32() / 2.5 {
                 e.0 = (random::<f32>() - 0.5) * rect.w();
                 e.1 = rect.h() / 2.0
             }
@@ -69,7 +70,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
         .for_each(|pos| {
             draw.ellipse()
                 .x_y(pos.0, pos.1)
-                .radius(4f32)
+                .radius(8f32)
                 .color(WHITE);
         });
 
@@ -80,7 +81,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
     } else {
         draw.ellipse()
             .x_y(app.mouse.x, app.mouse.y)
-            .radius(16f32)
+            .radius(12f32)
             .color(DARKGREEN);
     }
 
