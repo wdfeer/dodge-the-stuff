@@ -1,7 +1,6 @@
 use std::fmt::{Debug, Pointer};
 use nannou::{App, Frame};
 use nannou::color::{BLACK, WHITE};
-use nannou::color::chromatic_adaptation::AdaptInto;
 use nannou::event::Update;
 use nannou::prelude::DARKGREEN;
 use nannou::prelude::real::Real;
@@ -27,22 +26,18 @@ fn model(_app: &App) -> Model {
     }
 }
 
-fn get_random_coord(max: f32) -> f32 {
-    (random::<f32>() - 0.5) * max
-}
-
 fn update(app: &App, model: &mut Model, update: Update) {
     if !model.dead  {
         let rect = app.window_rect();
         for e in model.enemies.iter_mut() {
-            if e.clone() == EMPTY_ENEMY && random::<f32>() > update.since_last.as_secs_f32() {
-                e.0 = get_random_coord(rect.w());
-                e.1 = rect.h()
+            if *e == EMPTY_ENEMY && random::<f32>() < update.since_last.as_secs_f32() / 3f32 {
+                e.0 = (random::<f32>() - 0.5) * rect.w();
+                e.1 = rect.h() / 2.0
             }
 
-            if e.clone() != EMPTY_ENEMY {
-                // e.1 -= 10.0 * update.since_last.as_secs_f32();
-                if e.1 < rect.h() / 2.0 {
+            if *e != EMPTY_ENEMY {
+                e.1 -= 100.0 * update.since_last.as_secs_f32();
+                if e.1 < -rect.h() / 2.0 {
                     e.0 = EMPTY_ENEMY.0;
                     e.1 = EMPTY_ENEMY.1;
                 }
@@ -62,10 +57,9 @@ fn view(app: &App, model: &Model, frame: Frame) {
     frame.clear(BLACK);
 
     let draw = app.draw();
-    let win = app.window_rect();
 
     model.enemies.iter()
-        .filter(|pos| pos.clone().clone() != EMPTY_ENEMY)
+        .filter(|pos| **pos != EMPTY_ENEMY)
         .for_each(|pos| {
             draw.ellipse()
                 .x_y(pos.0, pos.1)
