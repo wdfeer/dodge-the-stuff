@@ -1,10 +1,11 @@
-use std::fmt::{Debug, Pointer};
-use nannou::{App, Frame};
 use nannou::color::{BLACK, WHITE};
+use nannou::event::Key::Space;
 use nannou::event::Update;
-use nannou::prelude::DARKGREEN;
 use nannou::prelude::real::Real;
+use nannou::prelude::DARKGREEN;
 use nannou::rand::random;
+use nannou::{App, Frame};
+use std::fmt::{Debug, Pointer};
 
 fn main() {
     nannou::app(model)
@@ -27,6 +28,11 @@ fn model(_app: &App) -> Model {
 }
 
 fn update(app: &App, model: &mut Model, update: Update) {
+    if app.keys.down.contains(&Space) && model.dead {
+        model.dead = false;
+        model.enemies = [EMPTY_ENEMY; 64];
+    }
+
     if !model.dead  {
         let rect = app.window_rect();
         for e in model.enemies.iter_mut() {
