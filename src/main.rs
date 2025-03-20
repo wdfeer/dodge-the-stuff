@@ -1,11 +1,9 @@
-use nannou::color::{BLACK, WHITE};
+use nannou::color::{BLACK, WHITE, WHITESMOKE};
 use nannou::event::Key::Space;
 use nannou::event::Update;
-use nannou::prelude::real::Real;
 use nannou::prelude::DARKGREEN;
 use nannou::rand::random;
 use nannou::{App, Frame};
-use std::fmt::{Debug, Pointer};
 
 fn main() {
     nannou::app(model)
@@ -77,7 +75,8 @@ fn view(app: &App, model: &Model, frame: Frame) {
     if model.dead {
         draw.text("Dead!")
             .font_size(64)
-            .x_y(0.0, 0.0);
+            .x_y(0.0, 0.0)
+            .color(WHITESMOKE);
     } else {
         draw.ellipse()
             .x_y(app.mouse.x, app.mouse.y)
