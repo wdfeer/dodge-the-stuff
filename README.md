@@ -1,7 +1,7 @@
 # About
 
-Simple 2D game written in a single ![rust file](https://github.com/wdfeer/dodge-the-stuff/blob/master/src/main.rs)
-using the ![nannou](https://nannou.cc/) library.
+Simple 2D game written in a single [rust file](https://github.com/wdfeer/dodge-the-stuff/blob/master/src/main.rs)
+using the [nannou](https://nannou.cc/) library.
 
 Gameplay:
 
